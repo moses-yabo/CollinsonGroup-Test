@@ -1,0 +1,119 @@
+## Class: MinimumCarsSolver
+
+````ts
+class MinimumCarsSolver {
+  // Helper method to check if seats are enough
+  private static checkCapacity(P: number[], S: number[]): boolean {
+    const totalPeople = P.reduce((a, b) => a + b, 0);
+    const totalSeats = S.reduce((a, b) => a + b, 0);
+    return totalSeats >= totalPeople;
+  }
+
+    // ----------------------------
+    // Solution 1 — Greedy Approach (Largest Seats First)
+    // ----------------------------
+    static solution1(P: number[], S: number[]): string | number {
+        if (!this.checkCapacity(P, S)) {
+            return "Not enough cars, please add more cars.";
+        }
+
+        const totalPeople = P.reduce((a, b) => a + b, 0);
+        const seats = [...S].sort((a, b) => b - a);
+
+        let usedSeats = 0;
+        let carsUsed = 0;
+
+        for (const capacity of seats) {
+            usedSeats += capacity;
+            carsUsed++;
+            if (usedSeats >= totalPeople) return carsUsed;
+        }
+
+        // fallback (should not happen)
+        return carsUsed;
+    }
+
+    // ----------------------------
+    // Solution 2 — Sort People & Seats Together
+    // ----------------------------
+    static solution2(P: number[], S: number[]): string | number {
+        if (!this.checkCapacity(P, S)) {
+            return "Not enough cars, please add more cars.";
+        }
+
+        const cars = P.map((p, i) => ({ people: p, seats: S[i] }));
+        cars.sort((a, b) => b.seats - a.seats);
+
+        let totalPeople = P.reduce((a, b) => a + b, 0);
+        let carsUsed = 0;
+
+        for (const car of cars) {
+            totalPeople -= car.seats;
+            carsUsed++;
+            if (totalPeople <= 0) return carsUsed;
+        }
+
+        return carsUsed;
+    }
+
+    // ----------------------------
+    // Solution 3 — Brute Force Check
+    // ----------------------------
+    static solution3(P: number[], S: number[]): string | number {
+        if (!this.checkCapacity(P, S)) {
+            return "Not enough cars, please add more cars.";
+        }
+
+        const totalPeople = P.reduce((a, b) => a + b, 0);
+        const seatsSorted = [...S].sort((a, b) => b - a);
+
+        for (let k = 1; k <= S.length; k++) {
+            const sum = seatsSorted.slice(0, k).reduce((a, b) => a + b, 0);
+            if (sum >= totalPeople) return k;
+        }
+
+        return "Not enough cars, please add more cars.";
+    }
+
+}
+
+## Installation
+
+Install my-project with npm
+
+```bash
+  npm install my-project
+  cd my-project
+````
+
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone https://link-to-project
+```
+
+Go to the project directory
+
+```bash
+  cd Collinson-test
+```
+
+Install dependencies
+
+```bash
+  npm install
+```
+
+Build and Compile Typescript
+
+```bash
+  tsc -w
+```
+
+Run the Script
+
+```bash
+  node ./dist/app.js
+```
