@@ -59,23 +59,29 @@ class MinimumCarsSolver {
     // ----------------------------
     // Solution 3 — Brute Force Check
     // ----------------------------
-    static solution3(P: number[], S: number[]): string | number {
-        if (!this.checkCapacity(P, S)) {
-            return "Not enough cars, please add more cars.";
-        }
+  static solution3(P: number[], S: number[]): number | string {
+    const totalPeople = P.reduce((acc, curr) => acc + curr, 0);
+    const totalSeats = S.reduce((a, b) => a + b, 0);
 
-        const totalPeople = P.reduce((a, b) => a + b, 0);
-        const seatsSorted = [...S].sort((a, b) => b - a);
-
-        for (let k = 1; k <= S.length; k++) {
-            const sum = seatsSorted.slice(0, k).reduce((a, b) => a + b, 0);
-            if (sum >= totalPeople) return k;
-        }
-
-        return "Not enough cars, please add more cars.";
+    // Check if there are enough seats
+    if (totalSeats < totalPeople) {
+      return 'Not enough cars, please add more cars.';
     }
 
-}
+    const n = S.length;
+    const seatsSorted = [...S].sort((a, b) => b - a);
+
+    // Test combinations using k cars (1 to n)
+    for (let k = 1; k <= n; k++) {
+      const sum = seatsSorted.slice(0, k).reduce((a, b) => a + b, 0);
+      if (sum >= totalPeople) {
+        return k;
+      }
+    }
+
+    return n;
+  }
+
 
 ## Installation
 
